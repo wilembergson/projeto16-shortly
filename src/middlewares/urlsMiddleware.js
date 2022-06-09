@@ -27,3 +27,19 @@ export async function urlValidation(req, res, next){
     }
     next()
 }
+
+export async function openUrlValidation(req, res, next){
+    const { shortUrl } = req.params
+    try{
+        const urlData = await db.query(
+            `SELECT urls.* FROM urls
+             WHERE urls.shortUrl = $1;`, [shortUrl])
+        if(urlData.rows.length === 0 || shortUrl===undefined){
+            return res.status(404).send(`URL não encontrado. Tente um URL valido.`)
+        }
+        res.locals.urlCathed= urlData.rows[0]
+    }catch(error){
+        return res.status(404).send(error)
+    }
+    next()
+}

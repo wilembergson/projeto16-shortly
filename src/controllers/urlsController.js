@@ -22,8 +22,22 @@ export async function getUrlById(req, res){
         if(urlData.rows.length === 0 || id===''){
             return res.status(404).send(`ID não encontrado. Tente um ID valido.`)
         }
-        res.status(200).send(urlData.rows[0])  
+        return res.status(200).send(urlData.rows[0])  
     }catch(error){
+        return res.status(500).send(error)
+    }
+}
+
+export async function openUrl(req, res){
+    const { urlCathed } = res.locals
+    try{
+        await db.query(
+            `UPDATE urls
+             SET visitcount = ${urlCathed.visitcount+1}
+             WHERE id = ${urlCathed.id};`)
+        res.redirect(urlCathed.url)  
+    }catch(error){
+        console.log(error)
         return res.status(500).send(error)
     }
 }

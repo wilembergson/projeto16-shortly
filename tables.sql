@@ -13,3 +13,13 @@ CREATE TABLE sessions
     userId INT NOT NULL,
     FOREIGN KEY (userId) REFERENCES users(id)
 );
+
+CREATE TABLE urls
+(
+    id SERIAL UNIQUE PRIMARY KEY,
+    shortUrl TEXT NOT NULL,
+    url TEXT NOT NULL,
+    visitCount INT NOT NULL DEFAULT 0,
+    userId INT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES users(id)
+);

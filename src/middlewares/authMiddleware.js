@@ -2,7 +2,7 @@ import Joi from 'joi'
 import bcrypt from 'bcrypt'
 import {v4 as uuid} from 'uuid'
 
-import db from '../../database.js'
+import db from '../database.js'
 
 export async function signUpValidation(req, res, next){
     const user = req.body
@@ -31,7 +31,7 @@ export async function signInValidation(req, res, next){
         password: Joi.string().required()
     })
     const {error} = loginSchema.validate(login)
-    if(error) return res.status(401).send('Preencha os campos corretamente.')
+    if(error) return res.status(422).send('Preencha os campos corretamente.')
     try{
         const user = await db.query(`SELECT users.* FROM users WHERE users.email = $1;`, [login.email])
         const newUser = user.rows[0]

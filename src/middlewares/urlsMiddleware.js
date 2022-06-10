@@ -43,3 +43,40 @@ export async function openUrlValidation(req, res, next){
     }
     next()
 }
+
+export async function deleteUrlValidation(req, res, next){
+    const {id} = req.params
+    const {authorization} = req.headers
+    const token = authorization?.replace("Bearer", "").trim()
+    const tokenSchema = Joi.object({
+        token: Joi.string().required(),
+    })
+    const {error} = tokenSchema.validate({token})
+    if(error) return res.status(422).json({message:'Insira um token válido.'})
+
+    try{
+        const sessionData = await db.query(
+            `SELECT * FROM sessions
+             WHERE token = $1;`, [token])
+        if(sessionData.rows.length === 0){
+            return res.status(404).send('Token invalido.')
+        }
+        const session = sessionData.rows[0]
+        
+        const urlData = await db.query(
+            `SELECT * FROM urls
+             WHERE id = $1;`, [id])
+        if(urlData.rows.length === 0){
+            return res.status(404).send('URL não encontrada.')
+        }
+        const url = urlData.rows[0]
+        
+        if(session.userid !== url.userid){
+            return res.status(401).send('Esta URL não pertence a este usuario.')
+        }
+        res.locals = {id}
+    }catch(error){
+        return res.status(500).send(error)
+    }
+    next()
+}

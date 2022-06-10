@@ -37,7 +37,16 @@ export async function openUrl(req, res){
              WHERE id = ${urlCathed.id};`)
         res.redirect(urlCathed.url)  
     }catch(error){
-        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
+export async function deleteUrl(req, res){
+    const {id} = res.locals
+    try{
+        await db.query(`DELETE FROM urls WHERE id = $1;`, [id])
+        return res.status(204).send('URL deletada com sucesso.')
+    }catch(error){
         return res.status(500).send(error)
     }
 }

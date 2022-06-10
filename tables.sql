@@ -4,6 +4,7 @@ CREATE TABLE users
     name text NOT NULL,
     email text NOT NULL UNIQUE,
     password text NOT NULL
+    "createdAt" TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE sessions
@@ -12,6 +13,7 @@ CREATE TABLE sessions
     token text NOT NULL,
     userId INT NOT NULL,
     FOREIGN KEY (userId) REFERENCES users(id)
+    "createdAt" TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE urls
@@ -22,4 +24,5 @@ CREATE TABLE urls
     visitCount INT NOT NULL DEFAULT 0,
     userId INT NOT NULL,
     FOREIGN KEY (userId) REFERENCES users(id)
+    "createdAt" TIMESTAMP DEFAULT NOW()
 );

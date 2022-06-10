@@ -35,13 +35,15 @@ export async function getUserById(req, res){
 export async function ranking(req, res){
     try{
         const userResult = await db.query(
-            `SELECT users.id, users.name, COUNT(u.id) AS "linksCount", SUM(u.visitcount) AS "visitCount"
+            `SELECT users.id, 
+                    users.name, 
+                    COUNT(u.id) AS "linksCount",
+                    COALESCE(SUM(u.visitcount), 0) AS "visitCount"
              FROM users
-             JOIN urls u ON users.id = u.userid
+             LEFT JOIN urls u ON users.id = u.userid
              GROUP BY users.id
              ORDER BY "visitCount" DESC
-             LIMIT 10;`)
-        
+             LIMIT 10;`) 
         return res.status(200).send(userResult.rows)
     }catch(erro){
         return res.status(500).send(erro)

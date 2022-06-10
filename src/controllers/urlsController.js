@@ -1,5 +1,6 @@
 import db from "../database.js"
 
+//GERAR UMA SHORTURL
 export async function shortenUrl(req, res){
     const { shortUrl, url, userId } = res.locals.urlData
     try{
@@ -12,6 +13,7 @@ export async function shortenUrl(req, res){
     }
 }
 
+//OBTER URL PELO ID
 export async function getUrlById(req, res){
     const { id } = req.params
     try{
@@ -28,6 +30,7 @@ export async function getUrlById(req, res){
     }
 }
 
+//REDIRECIONAR PARA A URL APARTIR DA SHORTURL
 export async function openUrl(req, res){
     const { urlCathed } = res.locals
     try{
@@ -41,6 +44,7 @@ export async function openUrl(req, res){
     }
 }
 
+//DELETAR URL
 export async function deleteUrl(req, res){
     const {id} = res.locals
     try{

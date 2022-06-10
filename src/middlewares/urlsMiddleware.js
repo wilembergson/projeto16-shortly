@@ -8,7 +8,7 @@ export async function urlValidation(req, res, next){
     const token = authorization?.replace("Bearer", "").trim()
     
     const urlSchema = Joi.object({
-        url: Joi.string().uri().required(),
+        url: Joi.string().uri().required()
     })
     const {error} = urlSchema.validate(urlBody)
     if(error) return res.status(422).json({message:'Insira uma URL válida.'})
